@@ -1,0 +1,17 @@
+# Node dependencies
+Dashboard/node_modules/
+Dashboard/client/node_modules/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Generated images and outputs
+*.png
+*.json
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
