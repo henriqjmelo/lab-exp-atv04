@@ -6,9 +6,6 @@ Dashboard/client/node_modules/
 __pycache__/
 *.py[cod]
 
-# Generated images and outputs
-*.png
-*.json
 
 # VS Code
 .vscode/
