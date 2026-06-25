@@ -6,6 +6,7 @@ export interface RepoRow {
   language: string;
   stars: number;
   forks: number;
+  openIssues: number;
   ownerType: string;
   createdYear: number;
 }
@@ -25,6 +26,9 @@ export interface RepoData {
   starsByLanguage: { name: string; avgStars: number }[];
   starsVsForks: { stars: number; forks: number; name: string }[];
   ownerVsStars: { name: string; avgStars: number }[];
+  allLanguages: string[];
+  allDomains: string[];
+  allYears: number[];
 }
 
 const EMPTY: RepoData = {
@@ -42,6 +46,9 @@ const EMPTY: RepoData = {
   starsByLanguage: [],
   starsVsForks: [],
   ownerVsStars: [],
+  allLanguages: [],
+  allDomains: [],
+  allYears: [],
 };
 
 function topEntries(counts: Map<string, number>, limit: number) {
@@ -70,6 +77,7 @@ export function useRepoData(): RepoData {
             language: record['Primary Language'] || 'Não informado',
             stars: Number(record['Stars Count']) || 0,
             forks: Number(record['Forks Count']) || 0,
+            openIssues: Number(record['Open Issues Count']) || 0,
             ownerType: record['Owner Type'] || 'Não informado',
             createdYear: Number(record['Created At']?.slice(0, 4)) || 0,
           }));
@@ -129,6 +137,18 @@ export function useRepoData(): RepoData {
           .slice(0, 200)
           .map((row) => ({ stars: row.stars, forks: row.forks, name: row.language }));
 
+        const allLanguages = Array.from(languageMap.entries())
+          .sort((a, b) => b[1] - a[1])
+          .map(([name]) => name);
+
+        const allDomains = Array.from(domainMap.entries())
+          .sort((a, b) => b[1] - a[1])
+          .map(([name]) => name);
+
+        const allYears = Array.from(yearMap.keys())
+          .filter((year) => year >= 2008)
+          .sort((a, b) => a - b);
+
         setData({
           loading: false,
           rows,
@@ -144,6 +164,9 @@ export function useRepoData(): RepoData {
           starsByLanguage,
           starsVsForks,
           ownerVsStars,
+          allLanguages,
+          allDomains,
+          allYears,
         });
       })
       .catch(() => {
